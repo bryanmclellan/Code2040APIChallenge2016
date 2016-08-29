@@ -23,9 +23,7 @@ def step2():
 
 # step 3 is to return the index of a value in a given array
 def step3():
-    endpointURL = 'http://challenge.code2040.org/api/haystack'
-    r = requests.post(endpointURL, data = {'token': myToken})
-    dict = r.json()
+    dict = getJsonResponse('http://challenge.code2040.org/api/haystack')
     needle = dict['needle']
     haystack = dict['haystack']
     index = haystack.index(needle) # gets the index to POST to API
@@ -36,9 +34,7 @@ def step3():
 
 # step 4 is to filter an array into values that do not begin with a certain prefix
 def step4():
-    endpointURL = 'http://challenge.code2040.org/api/prefix'
-    req = requests.post(endpointURL, data = {'token': myToken})
-    dict = req.json()
+    dict = getJsonResponse('http://challenge.code2040.org/api/prefix')
     prefix = dict['prefix']
     array = dict['array']
     myArray =  [a for a in array if a.find(prefix) != 0] # list comprehension for elements that don't have the prefix
@@ -49,9 +45,7 @@ def step4():
 
 # step 5 is to add an interval of seconds to a given ISO time
 def step5():
-    endpointURL = 'http://challenge.code2040.org/api/dating'
-    req = requests.post(endpointURL, data = {'token': myToken})
-    dict = req.json()
+    dict = getJsonResponse('http://challenge.code2040.org/api/dating')
     datestamp = dict['datestamp']
     interval = dict['interval']
     tuple_time = time.strptime(datestamp, "%Y-%m-%dT%H:%M:%SZ") # get ISO time in tuple format
@@ -61,6 +55,11 @@ def step5():
     r = requests.post(validateURL, data = {'token': myToken, 'datestamp': finalDate}) 
     print r.text
     return r.text
+
+# helper function to get json response from a POST request to an endpoint url
+def getJsonResponse(endpointURL):
+    req = requests.post(endpointURL, data = {'token': myToken})
+    return req.json()
 
 
 # tests for each function
